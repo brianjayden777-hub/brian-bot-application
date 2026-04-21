@@ -1,5 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Brian Bot Learning AI</title>
+
+<style>
+
+body {
+font-family: Arial;
+background: black;
+color: white;
+text-align: center;
+margin: 0;
+}
+
+header {
+background: #00ff88;
+color: black;
+padding: 15px;
+font-size: 22px;
+font-weight: bold;
+}
+
+.container {
+padding: 20px;
+}
+
+input {
+padding: 12px;
+width: 80%;
+margin: 5px;
+border-radius: 8px;
+border: none;
+}
+
+button {
+padding: 12px;
+margin: 5px;
+border: none;
+border-radius: 10px;
+background: #00ff88;
+font-size: 16px;
+cursor: pointer;
+}
+
+#chatBox {
+margin-top: 20px;
+padding: 10px;
+height: 300px;
+overflow-y: scroll;
+border: 1px solid #00ff88;
+}
+
+.messageUser {
+color: cyan;
+}
+
+.messageBot {
+color: #00ff88;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+🤖 Brian Bot — Learning Assistant
+</header>
+
+<div class="container">
+
+<input
+id="userInput"
+placeholder="Ask or teach me something...">
+
+<br>
+
+<button onclick="sendMessage()">
+Send
+</button>
+
+<div id="chatBox"></div>
+
+</div>
+
+<script>
+
+function sendMessage() {
+
+let input =
+document.getElementById("userInput").value
+.toLowerCase();
+
+let chatBox =
+document.getElementById("chatBox");
+
+/* Show user message */
+
+chatBox.innerHTML +=
+"<p class='messageUser'>You: "
++ input +
+"</p>";
+
+/* Load memory */
+
+let memory =
+JSON.parse(localStorage.getItem("brain"))
+|| {};
+
+let response = "";
+
+/* LEARNING SYSTEM */
+
+if (input.startsWith("learn")) {
+
+try {
+
+let parts =
+input.replace("learn","")
+.split(" is ");
+
+let question =
+parts[0].trim();
+
+let answer =
+parts[1].trim();
+
+memory[question] = answer;
+
+localStorage.setItem(
+"brain",
+JSON.stringify(memory)
+);
+
+response =
+"✅ Learned: "
++ question +
+" = "
++ answer;
+
+}
+
+catch {
+
+response =
+"Use format: learn question is answer";
+
+}
+
+}
+
+/* MEMORY CHECK */
+
+else if (memory[input]) {
+
+response = memory[input];
+
+}
+
+/* GREETINGS */
+
+else if (input.includes("hello")
+|| input.includes("hi")) {
+
+response =
+"Hello! I'm Brian Bot. You can teach me new things.";
+
+}
+
+/* TIME */
+
+else if (input.includes("time")) {
+
+response =
+"The time is "
++ new Date().toLocaleTimeString();
+
+}
+
+/* DATE */
+
+else if (input.includes("date")) {
+
+response =
+"Today's date is "
++ new Date().toLocaleDateString();
+
+}
+
+/* JOKES */
+
+else if (input.includes("joke")) {
+
+let jokes = [
+
+"Why do programmers prefer dark mode? Because light attracts bugs!",
+
+"Why was the computer cold? It forgot to close Windows!",
+
+"What do computers eat? Microchips!"
+
+];
+
+response =
+jokes[Math.floor(Math.random()*jokes.length)];
+
+}
+
+/* FUN FACTS */
+
+else if (input.includes("fact")) {
+
+let facts = [
+
+"Octopuses have three hearts.",
+
+"Honey never spoils.",
+
+"Bananas are berries."
+
+];
+
+response =
+facts[Math.floor(Math.random()*facts.length)];
+
+}
+
+/* RIDDLES */
+
+else if (input.includes("riddle")) {
+
+let riddles = [
+
+"What has keys but can't open locks? Keyboard.",
+
+"What has hands but can't clap? Clock.",
+
+"What runs but never walks? Water."
+
+];
+
+response =
+riddles[Math.floor(Math.random()*riddles.length)];
+
+}
+
+/* STORIES */
+
+else if (input.includes("story")) {
+
+response =
+"Once upon a time, a developer built Brian Bot, and it kept learning every day.";
+
+}
+
+/* MATH */
+
+else if (
+input.includes("+") ||
+input.includes("-") ||
+input.includes("*") ||
+input.includes("/")
+) {
+
+try {
+
+let result = eval(input);
+
+response =
+"Answer: " + result;
+
+}
+
+catch {
+
+response =
+"I couldn't solve that math.";
+
+}
+
+}
+
+/* DEFAULT */
+
+else {
+
+response =
+"I don't know yet. Teach me using: learn question is answer";
+
+}
+
+/* Show bot message */
+
+chatBox.innerHTML +=
+"<p class='messageBot'>Bot: "
++ response +
+"</p>";
+
+chatBox.scrollTop =
+chatBox.scrollHeight;
+
+/* Clear input */
+
+document.getElementById("userInput").value = "";
+
+}
+
+</script>
+
+</body>
+
+</html><!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
