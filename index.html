@@ -140,10 +140,127 @@ document.getElementById(id).style.display = "block";
 function sendMessage() {
 
 let input =
-document.getElementById("userInput").value;
+document.getElementById("userInput").value
+.toLowerCase();
+
+let response = "";
+
+/* LOAD MEMORY */
+
+let memory =
+JSON.parse(localStorage.getItem("brain"))
+|| {};
+
+/* LEARNING COMMAND */
+
+if (input.startsWith("learn")) {
+
+try {
+
+let parts =
+input.replace("learn","")
+.split(" is ");
+
+let question =
+parts[0].trim();
+
+let answer =
+parts[1].trim();
+
+memory[question] = answer;
+
+localStorage.setItem(
+"brain",
+JSON.stringify(memory)
+);
+
+response =
+"✅ Learned: " +
+question +
+" = " +
+answer;
+
+}
+catch {
+
+response =
+"Use format: learn question is answer";
+
+}
+
+}
+
+/* CHECK MEMORY */
+
+else if (memory[input]) {
+
+response = memory[input];
+
+}
+
+/* BASIC INTELLIGENCE */
+
+else if (input.includes("hello") ||
+         input.includes("hi")) {
+
+response =
+"Hello! I'm Brian Bot. I'm always learning.";
+
+}
+
+else if (input.includes("time")) {
+
+response =
+"The time is " +
+new Date().toLocaleTimeString();
+
+}
+
+else if (input.includes("date")) {
+
+response =
+"Today's date is " +
+new Date().toLocaleDateString();
+
+}
+
+/* MATH */
+
+else if (input.includes("+") ||
+         input.includes("-") ||
+         input.includes("*") ||
+         input.includes("/")) {
+
+try {
+
+let result = eval(input);
+
+response =
+"Answer: " + result;
+
+}
+catch {
+
+response =
+"I couldn't solve that.";
+
+}
+
+}
+
+/* DEFAULT */
+
+else {
+
+response =
+"I don't know yet. Teach me using: learn question is answer";
+
+}
+
+/* SHOW RESPONSE */
 
 document.getElementById("aiResponse").innerText =
-"You said: " + input;
+response;
 
 }
 
